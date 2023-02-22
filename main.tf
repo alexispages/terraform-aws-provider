@@ -5,12 +5,17 @@ terraform {
       version = "~> 4.0"
     }
   }
+  backend "s3" {
+    bucket         = "terraform-state-p2geb"
+    key            = "global/s3/student_10/terraform.state"
+    region         = "eu-west-3"
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
+    profile        = "student_10"
+  }
 }
 
 provider "aws" {
-  region = "eu-west-3"
-  shared_credentials_files = ["/home/apages/.aws/credentials"]
-  profile = "student_10"
 }
 
 data "aws_ami" "my_ami" {
@@ -40,15 +45,14 @@ data "aws_subnet" "my_subnet" {
   }
 }
 
-resource "aws_instance" "my_instance" {
-  ami           = data.aws_ami.my_ami.id  # Linux EC2 AMI
-  instance_type = var.instance_type
-  key_name      = "aws-terraform"
+resource "aws_launch_configuration" "plage_launch_configuration" {
+  name                 = "plage-launch-configuration"
+  image_id             = data.aws_ami.my_ami.id
+  instance_type        = "t3.micro"
+  key_name             = "aws-terraform"
 
-  subnet_id = data.aws_subnet.my_subnet.id  # Public subnet ID
-
-  tags = {
-    Name = "Plage-EC2"
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -57,10 +61,14 @@ resource "aws_key_pair" "ssh-key" {
   public_key = file("~/.ssh/aws-terraform.pub")
 }
 
-output "public_dns" {
-  value = aws_instance.my_instance.public_dns
-}
-
-output "public_ip" {
-  value = aws_instance.my_instance.public_ip
+resource "aws_autoscaling_group" "my_autoscaling_group" {
+  name                      = "plage-autoscaling-group"
+  launch_configuration      = aws_launch_configuration.plage_launch_configuration.id
+  vpc_zone_identifier       = ["data.aws_subnet.my_subnet.id"]
+  desired_capacity          = 1
+  min_size                  = 1
+  max_size                  = 3
+  termination_policies      = ["OldestInstance"]
+  health_check_grace_period = 300
+  health_check_type         = "EC2"
 }
