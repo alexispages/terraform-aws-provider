@@ -1,7 +1,7 @@
 variable "ami_name" {
-  description = "AMI name to filter"
+  description = "AMI name filter"
   type        = string
-  default     = "amzn2-ami-kernel-5.*-hvm-*-x86_64-gp2"
+  default     = "amzn2-ami-kernel-5.*-x86_64-gp2"
 }
 
 variable "instance_type" {
