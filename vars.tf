@@ -9,3 +9,15 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "asg_min_size" {
+  description = "Minimal size of autoscaling group"
+  type        = number
+  default     = 1
+}
+
+variable "asg_max_size" {
+  description = "Maximum size of autoscaling group"
+  type        = number
+  default     = 3
+}
