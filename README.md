@@ -5,7 +5,7 @@ This Terraform module creates an AWS Linux EC2 instance by default.
 ## Usage
 
 ```hcl
-module "nginx" {
+module "aws" {
     source = "./terraform-aws-provider"
     ami_name = "amzn2-ami-kernel-5.*-x86_64-gp2"
     instance_type = "t3.micro"
