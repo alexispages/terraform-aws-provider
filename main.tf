@@ -5,17 +5,6 @@ terraform {
       version = "~> 4.0"
     }
   }
-  backend "s3" {
-    bucket         = "terraform-state-p2geb"
-    key            = "global/s3/student_10/terraform.state"
-    region         = "eu-west-3"
-    dynamodb_table = "terraform-up-and-running-locks"
-    encrypt        = true
-    profile        = "student_10"
-  }
-}
-
-provider "aws" {
 }
 
 data "aws_ami" "my_ami" {
@@ -64,7 +53,7 @@ resource "aws_key_pair" "ssh-key" {
 resource "aws_autoscaling_group" "my_autoscaling_group" {
   name                      = "plage-autoscaling-group"
   launch_configuration      = aws_launch_configuration.plage_launch_configuration.id
-  vpc_zone_identifier       = ["data.aws_subnet.my_subnet.id"]
+  vpc_zone_identifier       = [data.aws_subnet.my_subnet.id]
   desired_capacity          = 1
   min_size                  = 1
   max_size                  = 3
