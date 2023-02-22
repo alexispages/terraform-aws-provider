@@ -37,7 +37,7 @@ data "aws_subnet" "my_subnet" {
 resource "aws_launch_configuration" "plage_launch_configuration" {
   name                 = "plage-launch-configuration"
   image_id             = data.aws_ami.my_ami.id
-  instance_type        = "t3.micro"
+  instance_type        = var.instance_type
   key_name             = "aws-terraform"
 
   lifecycle {
