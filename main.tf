@@ -35,7 +35,7 @@ data "aws_subnet" "my_subnet" {
 }
 
 resource "aws_launch_configuration" "plage_launch_configuration" {
-  name                 = "plage-launch-configuration"
+  name                 = "plage-launch-configuration-${terraform.workspace}"
   image_id             = data.aws_ami.my_ami.id
   instance_type        = var.instance_type
   key_name             = "aws-terraform"
@@ -51,7 +51,7 @@ resource "aws_key_pair" "ssh-key" {
 }
 
 resource "aws_autoscaling_group" "my_autoscaling_group" {
-  name                      = "plage-autoscaling-group"
+  name                      = "plage-asg-${terraform.workspace}"
   launch_configuration      = aws_launch_configuration.plage_launch_configuration.id
   vpc_zone_identifier       = [data.aws_subnet.my_subnet.id]
   desired_capacity          = 1

@@ -19,6 +19,7 @@ module "aws" {
 |------|-------------|------|---------|----------|
 | `ami_name` | AMI name filter | `string` | "amzn2-ami-kernel-5.*-x86_64-gp2" | no |
 | `instance_type` | Type of instance to use | `string` | "t3.micro" | no |
+| `asg_desired_capacity` | Desired capacity of autoscaling group | `number` | 1 | no |
 | `asg_min_size` | Minimal size of autoscaling group | `number` | 1 | no |
 | `asg_max_size` | Maximum size of autoscaling group | `number` | 3 | no |
 

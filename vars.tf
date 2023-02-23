@@ -10,6 +10,12 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
+variable "asg_desired_capacity" {
+  description = "Desired capacity of autoscaling group"
+  type        = number
+  default     = 1
+}
+
 variable "asg_min_size" {
   description = "Minimal size of autoscaling group"
   type        = number
